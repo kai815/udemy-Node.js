@@ -8,6 +8,7 @@ var btnExec1_onclick = function (event) {
   var start = (new Date()).getTime();
   var now = null;
   var n = 0;
+  //do whileが終わったら描画される
   do {
     now = (new Date()).getTime();
     time = now - (start + n * 1000);
@@ -20,6 +21,7 @@ var btnExec1_onclick = function (event) {
 var btnExec2_onclick = function (event) {
 
   var n = 0;
+  // 1秒毎に描画される
   var callback = function () {
     window.setTimeout(function () {
       write(++n);
