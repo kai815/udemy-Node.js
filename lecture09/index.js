@@ -9,16 +9,20 @@ Fibonacci.prototype.start = function () {
     this.stop();
   }
 
-  var self = this;
-  
+  // var self = this;
+  //thisはFibonacci
+  console.log(this);
+
   this.timerId = setInterval(function(){
+    //thisはTimeout object
+    console.log(this);
     // F(n) を表示
-    console.log(self.val0);
+    console.log(this.val0);
 
     // F(n+2) = F(n) + F(n+1)
-    var val2 = self.val0 + self.val1;
-    self.val0 = self.val1;
-    self.val1 = val2;
+    var val2 = this.val0 + this.val1;
+    this.val0 = this.val1;
+    this.val1 = val2;
   }, 1000);
 };
 
