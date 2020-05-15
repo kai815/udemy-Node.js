@@ -10,12 +10,9 @@ Fibonacci.prototype.start = function () {
   }
 
   // var self = this;
-  //thisはFibonacci
-  console.log(this);
+  //アロー関数にするとselfが不要
 
-  this.timerId = setInterval(function(){
-    //thisはTimeout object
-    console.log(this);
+  this.timerId = setInterval(() => {
     // F(n) を表示
     console.log(this.val0);
 
