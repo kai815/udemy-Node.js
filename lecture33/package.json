@@ -1,0 +1,13 @@
+{
+  "name": "lecture33",
+  "version": "1.0.0",
+  "main": "app.js",
+  "author": "Hideo Kaizuka",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "ejs": "^2.5.7",
+    "express": "^4.16.1"
+  }
+}
