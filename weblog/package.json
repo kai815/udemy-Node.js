@@ -1,0 +1,11 @@
+{
+  "name": "weblog",
+  "version": "1.0.0",
+  "description": "create simple blog for studying Node.js",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hideo Kaizuka",
+  "license": "ISC"
+}
