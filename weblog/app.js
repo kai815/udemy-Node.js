@@ -1,4 +1,4 @@
-var systemlogger = require("./lib/log/systemlogger.js");
+var systemlogger = require("./lib/logger/systemlogger.js");
 var express = require("express");
 var app = express();
 
