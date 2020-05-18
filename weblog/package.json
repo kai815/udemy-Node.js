@@ -9,6 +9,11 @@
   "author": "Hideo Kaizuka",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^7.0.0"
+    "del": "^3.0.0",
+    "eslint": "^7.0.0",
+    "gulp": "^3.9.1",
+    "gulp-sass": "^4.0.2",
+    "gulp-uglify": "^3.0.2",
+    "require-dir": "^1.0.0"
   }
 }
