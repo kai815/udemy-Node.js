@@ -1,4 +1,5 @@
 var { CONNECTION_URL, DATABSE, OPTIONS } = require("../../config/mongodb.config.js");
+var hash = require("./hash.js");
 var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
 var MongoClient = require("mongodb").MongoClient;
@@ -45,7 +46,7 @@ passport.use("local-strategy",
       var db = client.db(DATABSE);
       db.collection("users").findOne({
         email: username,
-        password: password
+        password: hash.digest(password)
       }).then((user) => {
         if(user){
           req.session.regenerate((error) =>{
