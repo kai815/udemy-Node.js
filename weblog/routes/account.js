@@ -1,5 +1,5 @@
 var { CONNECTION_URL, DATABSE, OPTIONS } = require("../config/mongodb.config.js");
-var { authenticate } =require("../lib/security/accountcontrol.js");
+var { authenticate, authorize } =require("../lib/security/accountcontrol.js");
 var router = require("express").Router();
 var MongoClient = require("mongodb").MongoClient;
 var tokens = new require("csrf")();
@@ -38,7 +38,7 @@ var validateRegistData = function(body) {
   return isValidated ? undefined :errors;
 };
 
-router.get("/", (req, res, next) =>{
+router.get("/", authorize("readWrite"), (req, res, next) =>{
   if(req.isAuthenticated()){
     next();
   }else{
@@ -54,7 +54,7 @@ router.get("/login", (req, res) => {
 
 router.post("/login", authenticate());
 
-router.get("/posts/regist", (req, res) => {
+router.get("/posts/regist", authorize("readWrite"), (req, res) => {
   tokens.secret((error, secret)=>{
     var token = tokens.create(secret);
     req.session._csrf = secret;
@@ -63,12 +63,12 @@ router.get("/posts/regist", (req, res) => {
   });
 });
 
-router.post("/posts/regist/input", (req, res) => {
+router.post("/posts/regist/input", authorize("readWrite"), (req, res) => {
   var original = createRegistData(req.body);
   res.render("./account/posts/regist-form.ejs", {original});
 });
 
-router.post("/posts/regist/confirm", (req, res) => {
+router.post("/posts/regist/confirm", authorize("readWrite"), (req, res) => {
   var original = createRegistData(req.body);
   var errors = validateRegistData(req.body);
   if (errors) {
@@ -78,7 +78,7 @@ router.post("/posts/regist/confirm", (req, res) => {
   res.render("./account/posts/regist-confirm.ejs", { original });
 });
 
-router.post("/posts/regist/execute", (req, res) => {
+router.post("/posts/regist/execute", authorize("readWrite"), (req, res) => {
   var secret = req.session._csrf;
   var token = req.cookies._csrf;
   if (tokens.verify(secret, token) === false){
@@ -107,7 +107,7 @@ router.post("/posts/regist/execute", (req, res) => {
   
 });
 
-router.get("/posts/regist/complete", (req, res) => {
+router.get("/posts/regist/complete", authorize("readWrite"), (req, res) => {
   res.render("./account/posts/regist-complete.ejs");
 });
 module.exports = router;

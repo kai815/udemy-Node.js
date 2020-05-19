@@ -4,15 +4,27 @@ var LocalStrategy = require("passport-local").Strategy;
 var MongoClient = require("mongodb").MongoClient;
 var initialize, authenticate, authorize;
 
-passport.serializeUser((email, done) =>{
+passport.serializeUser((email, done) => {
   done(null, email);
 });
 
-passport.deserializeUser((email, done) =>{
+passport.deserializeUser((email, done) => {
   MongoClient.connect(CONNECTION_URL, OPTIONS, (error, client) =>{
     var db = client.db(DATABSE);
     db.collection("users")
       .findOne({email})
+      .then((user)=>{
+        return new Promise((resolve, reject) => {
+          db.collection("privileges")
+            .findOne({role: user.role})
+            .then((privilege)=>{
+              user.permissions = privilege.permissions;
+              resolve(user);
+            }).catch((error)=>{
+              reject(error);
+            });
+        });
+      })
       .then((user) => {
         done(null, user);
       }).catch((error) => {
@@ -71,6 +83,18 @@ authenticate = function() {
       failureRedirect: "/account/login"
     }
   );
+};
+
+authorize = function (privilege){
+  return function(req, res, next){
+    if (req.isAuthenticated() &&
+        (req.user.permissions || []).indexOf(privilege) >=0)
+    {
+      next();
+    } else {
+      res.redirect("/account/login");
+    }
+  };
 };
 
 module.exports = {
