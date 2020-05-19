@@ -1,4 +1,6 @@
+var { CONNECTION_URL, DATABSE, OPTIONS } = require("../config/mongodb.config.js");
 var router = require("express").Router();
+var MongoClient = require("mongodb").MongoClient;
 
 var createRegistData = function(body) {
   var datetime = new Date();
@@ -7,7 +9,7 @@ var createRegistData = function(body) {
     published: datetime,
     updated: datetime,
     title: body.title,
-    content: body.title,
+    content: body.content,
     keywords: (body.keywords || "").split(","),
     authors: (body.authors || "").split(","),
   };
@@ -55,6 +57,28 @@ router.post("/posts/regist/confirm", (req, res) => {
     return;
   }
   res.render("./account/posts/regist-confirm.ejs", { original });
+});
+
+router.post("/posts/regist/execute", (req, res) => {
+  var original = createRegistData(req.body);
+  var errors = validateRegistData(req.body);
+  if (errors) {
+    res.render("./account/posts/regist-form.ejs", {errors, original});
+    return;
+  }
+  MongoClient.connect(CONNECTION_URL, OPTIONS, (error, client) => {
+    var db = client.db(DATABSE);
+    db.collection("posts")
+      .insertOne(original)
+      .then(()=>{
+        res.render("./account/posts/regist-complete.ejs", { original });
+      }).catch((error)=> {
+        throw error;
+      }).then(() =>{
+        client.close();
+      });
+  });
+  
 });
 
 module.exports = router;
