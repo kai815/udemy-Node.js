@@ -84,7 +84,7 @@ router.post("/posts/regist/execute", (req, res) => {
       .then(()=>{
         delete req.session._csrf;
         res.clearCookie("_csrf");
-        res.render("./account/posts/regist-complete.ejs", { original });
+        res.redirect("/account/posts/regist/complete");
       }).catch((error)=> {
         throw error;
       }).then(() =>{
@@ -94,4 +94,7 @@ router.post("/posts/regist/execute", (req, res) => {
   
 });
 
+router.get("/posts/regist/complete", (req, res) => {
+  res.render("./account/posts/regist-complete.ejs");
+});
 module.exports = router;
