@@ -13,7 +13,7 @@
       ],
       "program": "${workspaceFolder}/app.js",
       "env":{
-        "NODE_ENV": "devlopment"
+        "NODE_ENV": "development"
       }
     },
     {
